@@ -15,6 +15,8 @@ def main(args):
         print('Select valid mode: train or test')
         exit()
 
+    
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--mode', type=str, default='train')
