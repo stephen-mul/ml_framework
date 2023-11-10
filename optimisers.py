@@ -15,7 +15,7 @@ class adam_optimiser:
                                                           step_size_up=20, 
                                                           step_size_down=20)
         
-    def adjust_lr(self, decay_rate = 0.95):
+    def scheduler_step(self, decay_rate = 0.95):
         if self.schedule_type =='simple_decay':
             for param_group in self.optimiser.param_groups:
                 param_group['lr'] *= decay_rate
