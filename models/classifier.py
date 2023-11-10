@@ -43,8 +43,8 @@ class classifier(nn.Module):
             for X, y in tqdm(train_iter, ncols=50):
                 y = self.encode(y)
                 y_hat = self.forward(X)
-
-                l = loss(y_hat, y)
+                
+                l = loss.loss(y_hat, y)
                 optimiser.zero_grad()
                 l.backward()
                 optimiser.step()

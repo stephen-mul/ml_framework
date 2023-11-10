@@ -20,3 +20,10 @@ def vae_loss(out, imgs, mu, logVar):
 def cross_entropy(y_hat, y):
     ce_loss = nn.CrossEntropyLoss()
     return ce_loss(y_hat, y)
+
+class crossEntropy:
+    def __init__(self) -> None:
+        self.ce_loss = nn.CrossEntropyLoss()
+
+    def loss(self, y_hat, y):
+        return self.ce_loss(y_hat, y)
