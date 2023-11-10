@@ -4,7 +4,9 @@ train_params = {
     'n_epochs': 100,
     'dataset': 'MNIST',
     'batch_size': 32,
-    'optimiser': 'ADAM' 
+    'optimiser': 'ADAM', 
+    'learning_rate': 1e-2,
+    'scheduler': 'simple_decay'
 }
 
 test_params = {
