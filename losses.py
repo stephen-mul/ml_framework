@@ -23,7 +23,7 @@ def cross_entropy(y_hat, y):
 
 class crossEntropy:
     def __init__(self) -> None:
-        self.loss = nn.CrossEntropyLoss()
+        self.ce_loss = nn.CrossEntropyLoss()
 
-    def cross_entropy(self, y_hat, y):
-        return self.loss(y_hat, y)
+    def loss(self, y_hat, y):
+        return self.ce_loss(y_hat, y)

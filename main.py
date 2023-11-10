@@ -5,7 +5,7 @@ import dataloaders
 import optimisers
 import torchvision
 from models.classifier import classifier
-from losses import cross_entropy
+from losses import crossEntropy
 from network_utils import binary
 
 def main(args):
@@ -51,11 +51,11 @@ def main(args):
 
     ### Get loss function ###
     if params['loss'] == 'cross_entropy':
-        loss = cross_entropy
+        crossEntropy = crossEntropy()
     
     ### Training Loop ###
     net.train(n_epochs=params['n_epochs'], dataloader=dataloader, 
-              optimiser=optimiser, loss=loss)
+              optimiser=optimiser, loss=crossEntropy)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
