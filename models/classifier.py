@@ -40,18 +40,20 @@ class classifier(nn.Module):
         train_iter = dataloader
         for epoch in range(n_epochs):
             train_loss, n, start = 0.0, 0, time.time()
+            loss_total = 0
             for X, y in tqdm(train_iter, ncols=50):
                 y = self.encode(y)
                 y_hat = self.forward(X)
                 
                 l = loss.loss(y_hat, y)
-                print(l)
+                loss_total += l
                 optimiser.zero_grad()
                 l.backward()
                 optimiser.step()
 
                 train_loss += 1
                 n += X.shape[0]
+            print(loss_total)
             train_loss /= n
             lr = optimiser.get_lr()
 
