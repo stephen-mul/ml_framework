@@ -44,7 +44,7 @@ class classifier(nn.Module):
                 y = self.encode(y)
                 y_hat = self.forward(X)
                 print(loss)
-                print(loss.type)
+                exit()
                 l = loss.loss(y_hat, y)
                 optimiser.zero_grad()
                 l.backward()
