@@ -51,11 +51,11 @@ def main(args):
 
     ### Get loss function ###
     if params['loss'] == 'cross_entropy':
-        crossEntropy = crossEntropy()
+        cross_entropy = crossEntropy()
     
     ### Training Loop ###
     net.train(n_epochs=params['n_epochs'], dataloader=dataloader, 
-              optimiser=optimiser, loss=crossEntropy)
+              optimiser=optimiser, loss=cross_entropy)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
