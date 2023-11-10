@@ -3,6 +3,7 @@ train_params = {
     'num_classes': 10,
     'n_epochs': 100,
     'dataset': 'MNIST',
+    'batch_size': 32,
     'optimiser': 'ADAM' 
 }
 

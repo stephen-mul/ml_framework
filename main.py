@@ -2,6 +2,7 @@ import os
 import argparse
 import config
 import dataloaders
+import optimisers
 import torchvision
 from models.classifier import classifier
 from network_utils import binary
@@ -38,7 +39,15 @@ def main(args):
 
     ### Get Optimiser ###
 
-    
+    if params['optimiser'] == 'ADAM':
+        optimiser = optimisers.adam_optimiser(network=net,
+                                              learning_rate=params['learning_rate'],
+                                              scheduler=params['scheduler'])
+    else:
+        print('Select a valid optimiser: ADAM')
+        exit()
+
+    ### Get loss function ###
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
