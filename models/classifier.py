@@ -49,7 +49,7 @@ class classifier(nn.Module):
                 l.backward()
                 optimiser.step()
 
-                train_loss += 1.cpu().item()
+                train_loss += 1.item()
                 n += X.shape[0]
             train_loss /= n
             lr = optimiser.get_lr()
