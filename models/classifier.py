@@ -1,7 +1,7 @@
 import torch
 import time
 from tqdm import tqdm
-import torch.nn. as nn
+import torch.nn as nn
 import torch.nn.functional as F
 from network_utils import EarlyStop, binary, normalise
 
