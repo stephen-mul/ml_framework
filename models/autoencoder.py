@@ -5,6 +5,7 @@
 import torch
 import numpy as np
 import torch.nn as nn
+import tqdm
 import torch.nn.functional as F
 from network_blocks import Encoder, Decoder
 from collections import OrderedDict
@@ -281,7 +282,7 @@ class cVAE(nn.Module):
         self.label_embedding = nn.Embedding(nclass, ncond)
 
     def sampling(self, mean, logvar):
-        eps = torch.randn(mean.shape).to(device)
+        eps = torch.randn(mean.shape)
         sigma = 0.5 * torch.exp(logvar)
         return mean + eps * sigma
 
@@ -291,17 +292,22 @@ class cVAE(nn.Module):
         z = self.sampling(mean, logvar)
         return self.decoder(z, y), mean, logvar
     
-    def train(self, batch_size, dataloader):
-        
+    def train(self, n_epochs, dataloader, optimiser):
+        train_iter = dataloader
+        for epoch in range(n_epochs):
+            for X, y in tqdm.tqdm(train_iter, ncols=50):
+                y = self.encoder.encode(y)
+                ### needs to be finished for MNISTs
+
 
     def generate(self, class_idx):
         if (type(class_idx) is int):
             class_idx = torch.tensor(class_idx)
-        class_idx = class_idx.to(device)
+        class_idx = class_idx
         if (len(class_idx.shape) == 0):
             batch_size = None
             class_idx = class_idx.unsqueeze(0)
-            z = torch.randn((1, self.dim)).to(device)
+            z = torch.randn((1, self.dim))
         y = self.label_embeddings(class_idx)
         res = self.decoder(z, y)
         if not batch_size:
