@@ -45,11 +45,12 @@ class classifier(nn.Module):
                 y_hat = self.forward(X)
                 
                 l = loss.loss(y_hat, y)
+                print(l)
                 optimiser.zero_grad()
                 l.backward()
                 optimiser.step()
 
-                train_loss += 1.item()
+                train_loss += 1
                 n += X.shape[0]
             train_loss /= n
             lr = optimiser.get_lr()
