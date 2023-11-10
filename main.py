@@ -3,6 +3,7 @@ import argparse
 import config
 import dataloaders
 import optimisers
+import torch
 import torchvision
 from models.classifier import classifier
 from losses import crossEntropy
@@ -12,6 +13,10 @@ def main(args):
     #### Unpack arguments ####
     mode = args.mode
     name = args.name
+
+    ### Get GPU if available ###
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print('Training on ', device)
 
     if mode == 'train':
         params = config.train_params
@@ -24,6 +29,7 @@ def main(args):
     ### Define network ###
     net = classifier(img_channels=params['num_channels'], 
                      n_classes=params['num_classes'])
+    net.to(device)
 
     ### Get Dataloader ###
     if params['dataset'] == 'MNIST':
@@ -55,7 +61,7 @@ def main(args):
     
     ### Training Loop ###
     net.train(n_epochs=params['n_epochs'], dataloader=dataloader, 
-              optimiser=optimiser, loss=cross_entropy)
+              optimiser=optimiser, loss=cross_entropy, device=device)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
