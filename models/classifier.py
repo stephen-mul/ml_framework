@@ -39,9 +39,10 @@ class classifier(nn.Module):
     def train(self, n_epochs, dataloader, optimiser, loss):
         train_iter = dataloader
         for epoch in range(n_epochs):
-            train_loss, n, start = 0.0, 0, time.time()
+            train_loss, y_avg, n, start = 0.0, 0, 0, time.time()
             for X, y in tqdm(train_iter, ncols=50):
                 y = self.encode(y)
+                y_avg += y.mean()
                 y_hat = self.forward(X)
                 
                 l = loss.loss(y_hat, y)
@@ -55,7 +56,7 @@ class classifier(nn.Module):
             lr = optimiser.get_lr()
 
             print(f'epoch {epoch}, train loss {round(train_loss, 4)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
-            
+            print(f'y_avg: {y_avg}')
             optimiser.scheduler_step()
 
 
