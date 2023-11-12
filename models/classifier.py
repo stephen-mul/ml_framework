@@ -48,7 +48,6 @@ class classifier(nn.Module):
                 y = self.encode(y)
                 print(f'Type ofinput {type(X)}')
                 print(f'Device in train: {device}')
-                exit()
                 y_hat = self.forward(X)
                 
                 l = loss.loss(y_hat, y)
