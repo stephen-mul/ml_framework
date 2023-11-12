@@ -36,13 +36,15 @@ class classifier(nn.Module):
 
         return output
 
-    def train(self, n_epochs, dataloader, optimiser, loss):
+    def train(self, n_epochs, dataloader, optimiser, loss, device):
         train_iter = dataloader
         for epoch in range(n_epochs):
             train_loss, n, start = 0.0, 0, time.time()
             loss_total = 0
             for X, y in tqdm(train_iter, ncols=50):
-                y = self.encode(y)
+                X = X.to(device)
+                y = y.to(device)
+                y = self.encode(y).to(device)
                 y_hat = self.forward(X)
                 
                 l = loss.loss(y_hat, y)

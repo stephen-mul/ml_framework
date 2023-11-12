@@ -14,6 +14,11 @@ def normalise(im):
 def binary(x):
     return (x>0.5).float()
 
+def get_device():
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f'Training on {device}')
+    return device
+
 class EarlyStop:
     """Used to early stop the training if validation loss doesn't improve after a given patience."""
     def __init__(self, patience=20, verbose=False, delta=0, 
