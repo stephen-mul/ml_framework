@@ -1,5 +1,6 @@
 import torch
 import time
+import os
 from tqdm import tqdm
 import torch.nn as nn
 import torch.nn.functional as F
@@ -35,8 +36,18 @@ class classifier(nn.Module):
         output = F.log_softmax(x)
 
         return output
+    
+    def checkpoint(self, name, net_optimiser):
+        weight_dir = f'./weights/{name}/'
+        if not os.path.exists(weight_dir):
+            os.makedirs(weight_dir)
+            print(f'Created new experiment folder: {weight_dir}')
+        save_name = f'{weight_dir}classifier.pt'
 
-    def train(self, n_epochs, dataloader, optimiser, loss, device):
+        ### Define Early Stop object ###
+        early_stop = EarlyStop(patience=20, save_name=save_name)
+
+    def train(self, n_epochs, dataloader, optimiser, loss, device, name):
         train_iter = dataloader
         for epoch in range(n_epochs):
             train_loss, n, start = 0.0, 0, time.time()
