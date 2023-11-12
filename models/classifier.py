@@ -45,7 +45,7 @@ class classifier(nn.Module):
                 print(f'Type from dataloader {type(X)}')
                 X = X.to(device)
                 y = y.to(device)
-                y = self.encode(y)
+                y = self.encode(y).to(device)
                 print(f'Type ofinput {type(X)}')
                 print(f'Device in train: {device}')
                 y_hat = self.forward(X)
