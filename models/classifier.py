@@ -45,6 +45,8 @@ class classifier(nn.Module):
                 X.to(device)
                 y.to(device)
                 y = self.encode(y)
+                print(type(X))
+                exit()
                 y_hat = self.forward(X)
                 
                 l = loss.loss(y_hat, y)
