@@ -7,7 +7,7 @@ import torch
 import torchvision
 from models.classifier import classifier
 from losses import crossEntropy
-from network_utils import binary
+from network_utils import binary, get_device()
 
 def main(args):
     #### Unpack arguments ####
@@ -15,8 +15,7 @@ def main(args):
     name = args.name
 
     ### Get GPU if available ###
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print('Training on ', device)
+    device = get_device()
 
     if mode == 'train':
         params = config.train_params
