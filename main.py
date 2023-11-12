@@ -7,7 +7,7 @@ import torch
 import torchvision
 from models.classifier import classifier
 from losses import crossEntropy
-from network_utils import binary, get_device()
+from network_utils import binary, get_device
 
 def main(args):
     #### Unpack arguments ####
