@@ -45,7 +45,8 @@ class classifier(nn.Module):
                 X.to(device)
                 y.to(device)
                 y = self.encode(y)
-                print(type(X))
+                print(f'Type ofinput {type(X)}')
+                print(f'Device in train: {device}')
                 exit()
                 y_hat = self.forward(X)
                 
