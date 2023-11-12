@@ -42,6 +42,7 @@ class classifier(nn.Module):
             train_loss, n, start = 0.0, 0, time.time()
             loss_total = 0
             for X, y in tqdm(train_iter, ncols=50):
+                print(f'Type from dataloader {type(X)}')
                 X.to(device)
                 y.to(device)
                 y = self.encode(y)
