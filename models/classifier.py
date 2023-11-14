@@ -59,7 +59,7 @@ class classifier(nn.Module):
             train_loss /= n
             lr = optimiser.get_lr()
 
-            print(f'epoch {epoch}, train loss {round(train_loss, 4)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
+            print(f'epoch {epoch}, train loss {train_loss}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
             
             optimiser.scheduler_step()
 
