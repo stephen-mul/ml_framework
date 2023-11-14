@@ -119,7 +119,7 @@ def main():
                 train_loss += l.cpu().item()
                 n += X.shape[0]
             
-            train_loss /= n
+            train_loss
             lr = get_lr(optimiser)
 
             #print('epoch %d, train loss %.4f , time %.1f sec'
