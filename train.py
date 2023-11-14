@@ -124,7 +124,7 @@ def main():
 
             #print('epoch %d, train loss %.4f , time %.1f sec'
             #% (epoch, train_loss, time.time() - start))
-            print(f'epoch {epoch}, train loss {round(train_loss, 4)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
+            print(f'epoch {epoch}, train loss {train_loss}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
         
             if scheduler_type == 'simple_decay':
                 adjust_lr(optimiser)
