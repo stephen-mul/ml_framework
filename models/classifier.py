@@ -55,7 +55,6 @@ class classifier(nn.Module):
 
                 train_loss += 1
                 n += X.shape[0]
-            print(loss_total)
             epoch_loss = loss_total/n
             lr = optimiser.get_lr()
 
