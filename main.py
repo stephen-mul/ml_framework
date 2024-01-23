@@ -37,8 +37,7 @@ def main(args):
             torchvision.transforms.Lambda(lambda x: binary(x))
         ])
         dataset = dataloaders.mnist_loader(batch_size=params['batch_size'],
-                                              transforms=mnist_transform,
-                                              mode=mode)
+                                              transforms=mnist_transform)
         dataloader = dataset.get_iter()
     else:
         print('Select a valid dataset: MNIST')
