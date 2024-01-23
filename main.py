@@ -67,7 +67,7 @@ def main(args):
     #         device=device)
     
     ### Train and test loop ###
-    net.train_test(n_epochs=['n_epochs'], dataloader=dataloader,
+    net.train_test(n_epochs=params['n_epochs'], dataloader=dataloader,
                    optimiser=optimiser, loss=cross_entropy, device=device)
 
 
