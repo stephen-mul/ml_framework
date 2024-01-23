@@ -73,7 +73,7 @@ class classifier(nn.Module):
 
 
 
-    def train(self, n_epochs, dataloader, optimiser, loss, device, name):
+    def train(self, n_epochs, dataloader, optimiser, loss, device):
         train_iter = dataloader
         for epoch in range(n_epochs):
             train_loss, n, start = 0.0, 0, time.time()
