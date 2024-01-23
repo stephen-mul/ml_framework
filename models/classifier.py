@@ -69,7 +69,7 @@ class classifier(nn.Module):
             epoch_loss = loss_total/n
             total_samples += n
 
-            print(f'Number of samples {total_samples}, test loss {round(epoch_loss, 4)}, time {round(time.time() -start, 1)} sec')
+            print(f'Number of samples {total_samples}, test loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec')
 
 
 
@@ -96,7 +96,7 @@ class classifier(nn.Module):
             epoch_loss = loss_total/n
             lr = optimiser.get_lr()
 
-            print(f'epoch {epoch}, train loss {round(epoch_loss, 4)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
+            print(f'epoch {epoch}, train loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
             
             optimiser.scheduler_step()
 
@@ -125,7 +125,7 @@ class classifier(nn.Module):
             epoch_loss = loss_total/n
             lr = optimiser.get_lr()
 
-            print(f'epoch {epoch}, train loss {round(epoch_loss, 4)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
+            print(f'epoch {epoch}, train loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
             ### Caclculate test loss ###
             self.test(dataloader=test_iter, loss=loss, device=device)
             optimiser.scheduler_step()
