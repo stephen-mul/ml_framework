@@ -61,6 +61,11 @@ def main(args):
     ### Training Loop ###
     net.train(n_epochs=params['n_epochs'], dataloader=dataloader, 
               optimiser=optimiser, loss=cross_entropy, device=device)
+    
+    ### Testing Loop ###
+    net.test(dataloader=dataset.get_test_iter(), loss=cross_entropy, 
+             device=device)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

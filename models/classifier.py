@@ -47,6 +47,32 @@ class classifier(nn.Module):
         ### Define Early Stop object ###
         early_stop = EarlyStop(patience=20, save_name=save_name)
 
+    def test(self, dataloader, loss, device):
+        ### same as train loop but we hardcode n_epochs=1###
+        test_iter = dataloader
+        for epoch in range(1):
+            test_loss, n, start = 0.0, 0, time.time()
+            loss_total = 0
+            total_samples = 0
+            for X, y in tqdm(test_iter, ncols=50):
+                X = X.to(device)
+                y = y.to(device)
+                y = self.encode(y).to(device)
+                y_hat = self.forward(X)
+                
+                l = loss.loss(y_hat, y)
+                loss_total += l
+
+                test_loss_loss += 1
+                n += X.shape[0]
+            print(loss_total)
+            test_loss /= n
+            total_samples += n
+
+            print(f'Number of samples {total_samples}, test loss {round(test_loss, 4)}, time {round(time.time() -start, 1)} sec')
+
+
+
     def train(self, n_epochs, dataloader, optimiser, loss, device, name):
         train_iter = dataloader
         for epoch in range(n_epochs):
