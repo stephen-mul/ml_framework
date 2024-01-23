@@ -38,7 +38,8 @@ def main(args):
         ])
         dataset = dataloaders.mnist_loader(batch_size=params['batch_size'],
                                               transforms=mnist_transform)
-        dataloader = dataset.get_iter()
+        dataloader = [dataset.get_iter(), 
+                      dataloader.get_test_iter()]
     else:
         print('Select a valid dataset: MNIST')
         exit()
@@ -58,12 +59,16 @@ def main(args):
         cross_entropy = crossEntropy()
     
     ### Training Loop ###
-    #net.train(n_epochs=params['n_epochs'], dataloader=dataloader, 
+    #net.train(n_epochs=params['n_epochs'], dataloader=dataloader[0], 
     #          optimiser=optimiser, loss=cross_entropy, device=device)
     
     ### Testing Loop ###
-    net.test(dataloader=dataset.get_test_iter(), loss=cross_entropy, 
-             device=device)
+    #net.test(dataloader=dataloader[1], loss=cross_entropy, 
+    #         device=device)
+    
+    ### Train and test loop ###
+    net.train_test(n_epochs=['n_epochs'], dataloader=dataloader,
+                   optimiser=optimiser, loss=cross_entropy, device=device)
 
 
 if __name__ == '__main__':

@@ -100,5 +100,35 @@ class classifier(nn.Module):
             
             optimiser.scheduler_step()
 
+    ### We would like to calculate the test/validation loss each epoch###
+    def train_test(self, n_epochs, dataloader, optimiser, loss, device):
+        train_iter = dataloader[0]
+        test_iter = dataloader[1]
+        for epoch in range(n_epochs):
+            train_loss, n, start = 0.0, 0, time.time()
+            loss_total = 0
+            for X, y in tqdm(train_iter, ncols=50):
+                X = X.to(device)
+                y = y.to(device)
+                y = self.encode(y).to(device)
+                y_hat = self.forward(X)
+                
+                l = loss.loss(y_hat, y)
+                loss_total += l
+                optimiser.zero_grad()
+                l.backward()
+                optimiser.step()
+
+                train_loss += 1
+                n += X.shape[0]
+            print(loss_total)
+            train_loss /= n
+            lr = optimiser.get_lr()
+
+            print(f'epoch {epoch}, train loss {round(train_loss, 4)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
+            ### Caclculate test loss ###
+            self.test(dataloader=test_iter, loss=loss, device=device)
+            optimiser.scheduler_step()
+
 
                 
