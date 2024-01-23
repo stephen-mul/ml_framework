@@ -63,7 +63,7 @@ class classifier(nn.Module):
                 l = loss.loss(y_hat, y)
                 loss_total += l
 
-                test_loss_loss += 1
+                test_loss += 1
                 n += X.shape[0]
             print(loss_total)
             test_loss /= n
