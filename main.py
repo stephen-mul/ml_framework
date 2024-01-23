@@ -39,7 +39,7 @@ def main(args):
         dataset = dataloaders.mnist_loader(batch_size=params['batch_size'],
                                               transforms=mnist_transform)
         dataloader = [dataset.get_iter(), 
-                      dataloader.get_test_iter()]
+                      dataset.get_test_iter()]
     else:
         print('Select a valid dataset: MNIST')
         exit()
