@@ -12,7 +12,7 @@ from network_utils import EarlyStop, binary, normalise
 
 class classifier(nn.Module):
     def __init__(self, img_channels=1, n_classes=10, 
-                 early_stop=False, patience=20, delta=0, 
+                 early_stop=True, patience=20, delta=0, 
                  save_path='.checkpoints/checkpoint.pth'):
         super(classifier, self).__init__()
         self.n_classes = n_classes
