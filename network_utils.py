@@ -1,4 +1,5 @@
 import torch
+import os
 import numpy as np
 import time
 from tqdm import tqdm
@@ -22,7 +23,7 @@ def get_device():
 class EarlyStop:
     """Used to early stop the training if validation loss doesn't improve after a given patience."""
     def __init__(self, patience=20, verbose=False, delta=0, 
-                 save_name="checkpoint.pt"):
+                 save_path="./checkpoints/checkpoint.pth"):
         """
         Args:
             patience (int): How long to wait after last time validation loss improved.
@@ -36,20 +37,20 @@ class EarlyStop:
         """
         self.patience = patience
         self.verbose = verbose
-        self.save_name = save_name
+        self.save_path = save_path
         self.counter = 0
         self.best_score = None
         self.early_stop = False
         self.val_loss_min = np.Inf
         self.delta = delta
 
-    def __call__(self, val_loss, model, optimizer):
+    def __call__(self, val_loss, model, optimiser):
 
         score = -val_loss
 
         if self.best_score is None:
             self.best_score = score
-            self.save_checkpoint(val_loss, model, optimizer)
+            self.save_checkpoint(val_loss, model, optimiser)
         elif score < self.best_score - self.delta:
             self.counter += 1
             print(f'EarlyStopping counter: {self.counter} out of {self.patience}')
@@ -57,7 +58,7 @@ class EarlyStop:
                 self.early_stop = True
         else:
             self.best_score = score
-            self.save_checkpoint(val_loss, model, optimizer)
+            self.save_checkpoint(val_loss, model, optimiser)
             self.counter = 0
             
         return self.early_stop
@@ -67,5 +68,16 @@ class EarlyStop:
         if self.verbose:
             print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
         state = {"net":model.state_dict(), "optimiser":optimiser.state_dict()}
-        torch.save(state, self.save_name)
+        if not os.path.exists(os.path.dirname(self.save_path)):
+            try:
+                ### Create directory ###
+                os.makedirs(os.path.dirname(self.save_path))
+                print(f'Created checkpoint directory at 
+                      {os.path.dirname(self.save_path)}.')
+            except OSError as e:
+                print(f'Error correcting checkpoint directory 
+                      {os.path.dirname(self.save_path)} at {e}')
+        else:
+            print(f'Checkpoint directory at {os.path.dirname(self.save_path)} already exists.')
+        torch.save(state, self.save_path)
         self.val_loss_min = val_loss

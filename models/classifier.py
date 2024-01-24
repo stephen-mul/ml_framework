@@ -11,13 +11,21 @@ from network_utils import EarlyStop, binary, normalise
 ###################################
 
 class classifier(nn.Module):
-    def __init__(self, img_channels=1, n_classes=10):
+    def __init__(self, img_channels=1, n_classes=10, 
+                 early_stop=False, patience=20, delta=0, 
+                 save_path='.checkpoints/checkpoint.pth'):
         super(classifier, self).__init__()
         self.n_classes = n_classes
         
         ### Initialise layers ###
         self.Conv1 = nn.Conv2d(img_channels, 16, 3)
         self.FC1 = nn.Linear(16*26*26, n_classes)
+        ### Intialise loss history ###
+        self.history=[[],[]]
+        ### Initialise early stop object ###
+        if early_stop:
+            self.EarlyStop = EarlyStop(patience=patience, verbose=False, 
+                                       delta=delta, save_path=save_path)
 
     def encode(self, input):
         length = list(input.shape)[0]
@@ -36,18 +44,8 @@ class classifier(nn.Module):
         output = F.log_softmax(x)
 
         return output
-    
-    def checkpoint(self, name, net_optimiser):
-        weight_dir = f'./weights/{name}/'
-        if not os.path.exists(weight_dir):
-            os.makedirs(weight_dir)
-            print(f'Created new experiment folder: {weight_dir}')
-        save_name = f'{weight_dir}classifier.pt'
 
-        ### Define Early Stop object ###
-        early_stop = EarlyStop(patience=20, save_name=save_name)
-
-    def test(self, dataloader, loss, device):
+    def test(self, dataloader, optimiser, loss, device):
         ### same as train loop but we hardcode n_epochs=1###
         test_iter = dataloader
         for epoch in range(1):
@@ -67,9 +65,15 @@ class classifier(nn.Module):
                 n += X.shape[0]
             #print(loss_total)
             epoch_loss = loss_total/n
+            self.EarlyStop(val_loss=epoch_loss, model=self, 
+                           optimiser=optimiser)
             total_samples += n
+            ### Log loss in history ###
+            self.history[1].append(epoch_loss)
 
-            print(f'Number of samples {total_samples}, test loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec')
+            print(f'Number of samples {total_samples}, 
+                  test loss {round(epoch_loss.item(), 6)}, 
+                  time {round(time.time() -start, 1)} sec')
 
 
 
@@ -94,6 +98,8 @@ class classifier(nn.Module):
                 n += X.shape[0]
             #print(loss_total)
             epoch_loss = loss_total/n
+            ### Log loss in history ###
+            self.history[0].append(epoch_loss)
             lr = optimiser.get_lr()
 
             print(f'epoch {epoch}, train loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
@@ -123,11 +129,14 @@ class classifier(nn.Module):
                 n += X.shape[0]
             #print(loss_total)
             epoch_loss = loss_total/n
+            ### Log training loss in history - test is handle by test()###
+            self.history[0].append(epoch_loss)
             lr = optimiser.get_lr()
 
             print(f'epoch {epoch}, train loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
-            ### Caclculate test loss ###
-            self.test(dataloader=test_iter, loss=loss, device=device)
+            ### Caclculate test loss - must pass optimiser for early stopping###
+            self.test(dataloader=test_iter, optimiser=optimiser, 
+                      loss=loss, device=device)
             optimiser.scheduler_step()
 
 
