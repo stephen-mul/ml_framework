@@ -71,9 +71,7 @@ class classifier(nn.Module):
             ### Log loss in history ###
             self.history[1].append(epoch_loss)
 
-            print(f'Number of samples {total_samples}, 
-                  test loss {round(epoch_loss.item(), 6)}, 
-                  time {round(time.time() -start, 1)} sec')
+            print(f'Number of samples {total_samples}, test loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec')
 
 
 
