@@ -72,8 +72,7 @@ class EarlyStop:
             try:
                 ### Create directory ###
                 os.makedirs(os.path.dirname(self.save_path))
-                print(f'Created checkpoint directory at 
-                      {os.path.dirname(self.save_path)}.')
+                print(f'Created checkpoint directory at {os.path.dirname(self.save_path)}.')
             except OSError as e:
                 print(f'Error correcting checkpoint directory 
                       {os.path.dirname(self.save_path)} at {e}')
