@@ -69,7 +69,7 @@ class classifier(nn.Module):
                            optimiser=optimiser)
             total_samples += n
             ### Log loss in history ###
-            self.history[1].append(epoch_loss)
+            self.history[1].append(epoch_loss.item())
 
             print(f'Number of samples {total_samples}, test loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec')
 
@@ -97,7 +97,7 @@ class classifier(nn.Module):
             #print(loss_total)
             epoch_loss = loss_total/n
             ### Log loss in history ###
-            self.history[0].append(epoch_loss)
+            self.history[0].append(epoch_loss.item())
             lr = optimiser.get_lr()
 
             print(f'epoch {epoch}, train loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
@@ -128,7 +128,7 @@ class classifier(nn.Module):
             #print(loss_total)
             epoch_loss = loss_total/n
             ### Log training loss in history - test is handle by test()###
-            self.history[0].append(epoch_loss)
+            self.history[0].append(epoch_loss.item())
             lr = optimiser.get_lr()
 
             # Print the GPU memory usage
