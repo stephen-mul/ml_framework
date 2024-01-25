@@ -131,10 +131,23 @@ class classifier(nn.Module):
             self.history[0].append(epoch_loss)
             lr = optimiser.get_lr()
 
+            # Print the GPU memory usage
+            current_memory = torch.cuda.memory_allocated()
+            max_memory = torch.cuda.max_memory_allocated()
+
+            print(f"Current GPU memory usage: {current_memory / (1024**2):.2f} MB")
+            print(f"Max GPU memory usage: {max_memory / (1024**2):.2f} MB")
+
             print(f'epoch {epoch}, train loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
             ### Caclculate test loss - must pass optimiser for early stopping###
             self.test(dataloader=test_iter, optimiser=optimiser, 
                       loss=loss, device=device)
+            # Print the GPU memory usage
+            current_memory = torch.cuda.memory_allocated()
+            max_memory = torch.cuda.max_memory_allocated()
+
+            print(f"Current GPU memory usage: {current_memory / (1024**2):.2f} MB")
+            print(f"Max GPU memory usage: {max_memory / (1024**2):.2f} MB")
             optimiser.scheduler_step()
 
 
