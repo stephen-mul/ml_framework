@@ -34,3 +34,6 @@ class adam_optimiser:
     
     def step(self):
         self.optimiser.step()
+
+    def state_dict(self):
+        return self.optimiser.state_dict()
