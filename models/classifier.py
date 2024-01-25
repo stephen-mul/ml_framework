@@ -12,7 +12,7 @@ from network_utils import EarlyStop, binary, normalise
 
 class classifier(nn.Module):
     def __init__(self, img_channels=1, n_classes=10, 
-                 early_stop=True, patience=20, delta=0, 
+                 early_stop=True, patience=2, delta=0, 
                  save_path='.checkpoints/checkpoint.pth'):
         super(classifier, self).__init__()
         self.n_classes = n_classes
@@ -65,13 +65,18 @@ class classifier(nn.Module):
                 n += X.shape[0]
             #print(loss_total)
             epoch_loss = loss_total/n
-            self.EarlyStop(val_loss=epoch_loss, model=self, 
-                           optimiser=optimiser)
+            early_stop_val = self.EarlyStop(val_loss=epoch_loss, model=self, 
+                                            optimiser=optimiser)
             total_samples += n
             ### Log loss in history ###
             self.history[1].append(epoch_loss.item())
 
             print(f'Number of samples {total_samples}, test loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec')
+            if early_stop_val == True:
+                print(f'Network no longer improving. Stopping training.')
+                return early_stop_val
+            else:
+                return early_stop_val
 
 
 
@@ -140,11 +145,14 @@ class classifier(nn.Module):
 
             print(f'epoch {epoch}, train loss {round(epoch_loss.item(), 6)}, time {round(time.time() -start, 1)} sec, lr {round(lr, 4)}')
             ### Caclculate test loss - must pass optimiser for early stopping###
-            self.test(dataloader=test_iter, optimiser=optimiser, 
-                      loss=loss, device=device)
+            early_stop_val = self.test(dataloader=test_iter, optimiser=optimiser, 
+                                       loss=loss, device=device)
             # Print the GPU memory usage
             current_memory = torch.cuda.memory_allocated()
             max_memory = torch.cuda.max_memory_allocated()
+            ### Stop further updates to model if no longer improving ###
+            if early_stop_val == True:
+                break
 
             print(f"Current GPU memory usage: {current_memory / (1024**2):.2f} MB")
             print(f"Max GPU memory usage: {max_memory / (1024**2):.2f} MB")
